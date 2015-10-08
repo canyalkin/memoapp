@@ -10,6 +10,8 @@ import android.view.View;
 
 public class MemoAppMainActivity extends ActionBarActivity {
 
+	private static final String TAG_MEMO_APP_MAIN_ACTIVITY = "MemoAppMainActivity";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,8 +38,14 @@ public class MemoAppMainActivity extends ActionBarActivity {
 	}
 	
 	public void addItem(View view){
-		Log.d("MemoAppMainActivity", "AddItem clikced!");
+		Log.d(TAG_MEMO_APP_MAIN_ACTIVITY, "AddItem clikced!");
 		Intent intent = new Intent(this, PopupAddActivity.class);
+		startActivity(intent);
+	}
+	
+	public void ask(View view){
+		Log.d(TAG_MEMO_APP_MAIN_ACTIVITY, "Ask clikced!");
+		Intent intent = new Intent(this, AskActivity.class);
 		startActivity(intent);
 	}
 	

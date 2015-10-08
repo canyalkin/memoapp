@@ -8,5 +8,10 @@
     <string name="title_activity_popup_add">Add Word</string>
     <string name="enter_word">Enter Word</string>
     <string name="enter_meaning">Enter Meaning</string>
+    <string name="ask_button_desc">Ask Button</string>
+    <string name="title_activity_ask">Answer</string>
+    <string name="word_text">Word</string>
+    <string name="skip_text">Skip</string>
+    <string name="splitter">splitter</string>
 
 </resources>

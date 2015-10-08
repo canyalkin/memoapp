@@ -1,9 +1,11 @@
 package canyalkin.net.memoapp;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +18,12 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import canyalkin.net.memoapp.R.layout;
+import canyalkin.net.memoapp.db.WordDictionary;
+import canyalkin.net.memoapp.db.WordDictionaryDAO;
 
 public class PopupAddActivity extends ActionBarActivity implements OnClickListener{
 	
+	private static final String POPUP = "PopupAddActivity";
 	EditText editWord,editMeaning;
 	TextView textWordtToRemember, textMeaning;
 	
@@ -29,7 +34,7 @@ public class PopupAddActivity extends ActionBarActivity implements OnClickListen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_popup_add);
-		Log.d("PopupAddActivity", "onCreate called!");
+		Log.d(POPUP, "onCreate called!");
 		LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayout1);
 		
 		
@@ -76,11 +81,6 @@ public class PopupAddActivity extends ActionBarActivity implements OnClickListen
 		okCancelLayout.setVisibility(View.VISIBLE);
 		linearLayout.addView(okCancelLayout);
 		
-		
-		
-		
-		
-		
 	}
 
 	@Override
@@ -107,16 +107,37 @@ public class PopupAddActivity extends ActionBarActivity implements OnClickListen
 		
 		Button b=(Button)v;
 		if(b.getId()==1){
-			//OK
-			Log.d("popup", "ok clicked");
+			//OK button clicked
+			String keyWord = editWord.getText().toString();
+			String meaning =editMeaning.getText().toString();
+			if(keyWord.isEmpty()){
+				Log.d(POPUP, "keyword empty");
+				AppUtil.showAlertMessage(this,"empty keyword");
+				return;
+			}
+			if(meaning.isEmpty()){
+				Log.d(POPUP, "meaning empty");
+				AppUtil.showAlertMessage(this,"empty meaning");
+				return;
+			}
+			WordDictionaryDAO dao=new WordDictionaryDAO(this);
+			WordDictionary wd=new WordDictionary();
+			wd.setKeyword(keyWord);
+			wd.setMeaning(meaning);
+			boolean isInserted = dao.insert(wd);
+			Log.d(POPUP, "ok clicked isInserted:"+isInserted);
+			if(isInserted){
+				finish();
+			}
 		}else if(b.getId()==2){
-			//Cancel
-			Log.d("popup", "cancel clicked");
+			//Cancel button clicked
+			Log.d(POPUP, "cancel clicked");
 			finish();
 		}
-		
 	}
 	
+	
+
 	@Override
 	protected void onStop() {
 		Log.d("PopupAddActivity", "stopped!");
