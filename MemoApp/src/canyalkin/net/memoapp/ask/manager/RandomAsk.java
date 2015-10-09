@@ -1,6 +1,7 @@
 package canyalkin.net.memoapp.ask.manager;
 
 import java.util.List;
+import java.util.Random;
 
 import android.content.Context;
 import canyalkin.net.memoapp.db.WordDictionary;
@@ -20,19 +21,19 @@ public class RandomAsk implements IAskManager {
 	@Override
 	public void init() {
 		WordDictionaryDAO dao=new WordDictionaryDAO(context);	
-		List<WordDictionary> tempWordList = dao.readAll();
-		wordList=tempWordList;
+		wordList = dao.readAll();
+		shuffleList(wordList);
 	}
 
 	@Override
 	public String getNext() {
-		if(wordList.size()!=0){
+		if(wordList!=null && wordList.size()!=0){
 			current=wordList.get(0);
 			wordList.remove(0);
 			return current.getKeyword();
 		}
 		current=null;
-		return null;
+		return "";
 	}
 
 	@Override
@@ -44,5 +45,21 @@ public class RandomAsk implements IAskManager {
 		}
 		return false;
 	}
+	private void shuffleList(List a) {
+	    int n = a.size();
+	    Random random = new Random();
+	    random.nextInt();
+	    for (int i = 0; i < n; i++) {
+	      int change = i + random.nextInt(n - i);
+	      swap(a, i, change);
+	    }
+	  }
+
+	  private static void swap(List a, int i, int change) {
+	    Object helper = a.get(i);
+	    a.set(i, a.get(change));
+	    a.set(change, helper);
+	  }
+
 
 }

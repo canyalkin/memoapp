@@ -22,11 +22,14 @@ public class AskActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_ask);
-		askManager=new RandomAsk(this.getApplicationContext());
+		askManager=new RandomAsk(this);
 		
 		final TextView keyWordTextView = (TextView)findViewById(R.id.textViewKeyWord);
-		
-		keyWordTextView.setText(askManager.getNext());
+		String word=askManager.getNext();
+		if(word.equals("")){
+			finish();
+		}
+		keyWordTextView.setText(word);
 		final EditText editTextMeaning = (EditText)findViewById(R.id.editTextMeaning);
 		editTextMeaning.setOnEditorActionListener(
 				new OnEditorActionListener(){
@@ -36,7 +39,11 @@ public class AskActivity extends ActionBarActivity {
 				      if (actionId==KeyEvent.KEYCODE_ENTER || actionId==6) {
 				    	  if(askManager.isMeaningInclude(editTextMeaning.getText().toString())){
 				    		  Log.d(TAG_ASK_ACTIVITY, "meaning true!");
-				    		  keyWordTextView.setText(askManager.getNext());
+				    		  String word=askManager.getNext();
+				    			if(word.equals("")){
+				    				finish();
+				    			}
+				    		  keyWordTextView.setText(word);
 				    		  editTextMeaning.setText("");
 				    	  }
 				    	  Log.d(TAG_ASK_ACTIVITY, "enter pressed");
