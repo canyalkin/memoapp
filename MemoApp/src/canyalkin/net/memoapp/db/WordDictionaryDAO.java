@@ -23,6 +23,11 @@ public class WordDictionaryDAO extends AbstractDAO{
 	private final String[] allColumns = { MySQLiteHelper.COLUMN_KEY_WORD,
 		      MySQLiteHelper.COLUMN_MEANING,MySQLiteHelper.COLUMN_CREATE_DATE, MySQLiteHelper.COLUMN_NUM_ASKED, MySQLiteHelper.COLUMN_WRONG_ANSWER};
 	
+	private String updateNumOfWrong="update table set "+
+			MySQLiteHelper.COLUMN_WRONG_ANSWER + "= "+MySQLiteHelper.COLUMN_WRONG_ANSWER+"+1 "+
+			MySQLiteHelper.COLUMN_NUM_ASKED + "= "+MySQLiteHelper.COLUMN_NUM_ASKED+"+1 "+
+			"where "+MySQLiteHelper.COLUMN_KEY_WORD+"= ?";
+	
 	public WordDictionaryDAO(Context context) {
 		super(context);
 	}
@@ -72,6 +77,23 @@ public class WordDictionaryDAO extends AbstractDAO{
 	    	
 	    }
 	    return wordList;
+		
+	}
+	
+	public boolean updateWrongAnsAndNumAsked(String key,int wrongNum,int numAsked){
+		
+		open();
+		ContentValues newValues = new ContentValues();
+		newValues.put(MySQLiteHelper.COLUMN_WRONG_ANSWER, wrongNum);
+		newValues.put(MySQLiteHelper.COLUMN_NUM_ASKED, numAsked);
+
+		String[] args = new String[]{key};
+		int ret = db.update(MySQLiteHelper.TABLE_WORD_DICTIONARY, newValues, MySQLiteHelper.COLUMN_KEY_WORD + "=?", args);
+		close();
+		if(ret>0){
+			return true;
+		}
+		return false;
 		
 	}
 

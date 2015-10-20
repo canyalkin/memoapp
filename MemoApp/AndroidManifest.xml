@@ -8,6 +8,8 @@
         android:minSdkVersion="11"
         android:targetSdkVersion="18" />
 
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+	<uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/wicon"
@@ -34,11 +36,17 @@
         <activity
             android:name=".AskActivity"
             android:label="@string/title_activity_ask"
+            android:launchMode="singleInstance"
+    		android:taskAffinity=""
+    		android:clearTaskOnLaunch="true"
+			android:finishOnTaskLaunch="true"
             android:parentActivityName=".MemoAppMainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="canyalkin.net.memoapp.MemoAppMainActivity" />
         </activity>
+        <receiver android:name="canyalkin.net.memoapp.alarm.management.MyAlarmBroadcastReceiver">
+	    </receiver>
     </application>
 
 </manifest>

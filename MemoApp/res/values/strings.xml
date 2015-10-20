@@ -13,5 +13,8 @@
     <string name="word_text">Word</string>
     <string name="skip_text">Skip</string>
     <string name="splitter">splitter</string>
-
+	<string name="successful">successful</string>
+	<string name="correct">Correct</string>
+	<string name="word">Word</string>
+    
 </resources>

@@ -2,11 +2,14 @@ package canyalkin.net.memoapp;
 
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import canyalkin.net.memoapp.alarm.management.MyAlarmBroadcastReceiver;
 
 public class MemoAppMainActivity extends ActionBarActivity {
 
@@ -16,6 +19,40 @@ public class MemoAppMainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_memo_app_main);
+		Log.d(TAG_MEMO_APP_MAIN_ACTIVITY, "Main onCreate called!");
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.d(TAG_MEMO_APP_MAIN_ACTIVITY, "Main onResume called!");
+		Intent intent = new Intent(this, MyAlarmBroadcastReceiver.class);
+		PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, 0);
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.cancel(sender);
+		Log.d(TAG_MEMO_APP_MAIN_ACTIVITY, "Alarm canceled!");
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.d(TAG_MEMO_APP_MAIN_ACTIVITY, "Main stop called!");
+		
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		MyAlarmBroadcastReceiver alarmBroadcastReceiver=new MyAlarmBroadcastReceiver();
+		alarmBroadcastReceiver.setOnetimeTimer(this);
+		Log.d(TAG_MEMO_APP_MAIN_ACTIVITY, "Main onPause called!");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG_MEMO_APP_MAIN_ACTIVITY, "Main onDestroy called!");
+		
 	}
 
 	@Override
