@@ -1,11 +1,12 @@
 package canyalkin.net.memoapp.db;
 
 import java.util.Date;
+import java.util.List;
 
 public class WordDictionary {
 	
 	private String keyword;
-	private String meaning;
+	private List<String> meaning;
 	private Date createDate;
 	private int numAsked;
 	private int numWrong;
@@ -26,12 +27,12 @@ public class WordDictionary {
 	}
 
 
-	public String getMeaning() {
+	public List<String> getMeaning() {
 		return meaning;
 	}
 
 
-	public void setMeaning(String meaning) {
+	public void setMeaning(List<String> meaning) {
 		this.meaning = meaning;
 	}
 
@@ -101,8 +102,14 @@ public class WordDictionary {
 
 	@Override
 	public String toString() {
-		return "WordDictionary [keyword=" + keyword + ", meaning=" + meaning + ", createDate=" + createDate
-				+ ", numAsked=" + numAsked + ", numWrong=" + numWrong + "]";
+		
+		StringBuilder sb=new StringBuilder();
+		for (String string : meaning) {
+			sb.append(string + "-");
+		}
+		
+		return "WordDictionary [keyword=" + keyword + ", createDate=" + createDate
+				+ ", numAsked=" + numAsked + ", numWrong=" + numWrong + "]" + " meaning="+sb.toString();
 	}
 	
 	

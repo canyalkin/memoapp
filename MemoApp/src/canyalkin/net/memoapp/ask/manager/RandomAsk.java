@@ -1,7 +1,11 @@
 package canyalkin.net.memoapp.ask.manager;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import javax.xml.transform.Templates;
 
 import android.content.Context;
 import android.util.Log;
@@ -24,8 +28,48 @@ public class RandomAsk implements IAskManager {
 	@Override
 	public void init() {
 		WordDictionaryDAO dao=new WordDictionaryDAO(context);	
-		wordList = dao.readAll();
-		shuffleList(wordList);
+		List<WordDictionary> list = dao.readAll();
+		if(list.size()<16){
+			wordList=list;
+		}else{
+			List<WordDictionary> tempList=new LinkedList<WordDictionary>();
+			Random random = new Random();
+			HashSet<Integer> indexSet=new  HashSet<Integer>();
+			int firstPart=list.size()/2;
+			
+			while(tempList.size()<8){
+				int index = random.nextInt(firstPart);
+				
+				while(indexSet.contains(index)){
+					index++;
+					index=index%(firstPart);
+				}
+				tempList.add(list.get(index));
+				indexSet.add(index);
+				
+			}
+			
+			indexSet.clear();
+			int bound=0;
+			if(list.size()%2==0){
+				bound=list.size()/2;
+			}else{
+				bound=list.size()/2+1;
+			}
+			while(tempList.size()<16){
+				int index=random.nextInt(bound);
+				while(indexSet.contains(index)){
+					index++;
+					index=index%(bound);
+				}
+				tempList.add(list.get(index+firstPart));
+				indexSet.add(index);
+				
+			}
+			wordList=tempList;
+		}
+		
+		//shuffleList(wordList);
 	}
 
 	@Override
@@ -59,11 +103,14 @@ public class RandomAsk implements IAskManager {
 			Log.d(RANDOM_ASK_ACT, "to lower:"+s);
 		}
 		if(current!=null){
-			
-			if( Math.ceil(current.getMeaning().length()/2.0) <= s.length() && current.getMeaning().contains(s)){
-				wrongCounter=0;
-				return true;
+			List<String> meaningList = current.getMeaning();
+			for (String string : meaningList) {
+				if( Math.ceil(string.length()/2.0) <= s.length() && string.contains(s)){
+					wrongCounter=0;
+					return true;
+				}
 			}
+			
 		}
 		wrongCounter++;
 		return false;
@@ -92,7 +139,16 @@ public class RandomAsk implements IAskManager {
 	@Override
 	public String getMeaning() {
 		if(current!=null){
-			return current.getMeaning();
+			StringBuilder sb=new StringBuilder();
+			List<String> meaningList = current.getMeaning();
+			for (int i=0;i<meaningList.size();i++) {
+				if(i<meaningList.size()-1){
+					sb.append(meaningList.get(i)+", ");
+				}else{
+					sb.append(meaningList.get(i));
+				}
+			}
+			return sb.toString();
 		}
 		return "";
 	}

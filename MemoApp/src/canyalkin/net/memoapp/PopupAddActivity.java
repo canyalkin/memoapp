@@ -1,5 +1,7 @@
 package canyalkin.net.memoapp;
 
+import java.util.LinkedList;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -108,8 +110,8 @@ public class PopupAddActivity extends ActionBarActivity implements OnClickListen
 		Button b=(Button)v;
 		if(b.getId()==1){
 			//OK button clicked
-			String keyWord = editWord.getText().toString();
-			String meaning =editMeaning.getText().toString();
+			String keyWord = editWord.getText().toString().trim();
+			String meaning =editMeaning.getText().toString().trim();
 			if(keyWord.isEmpty()){
 				Log.d(POPUP, "keyword empty");
 				AppUtil.showAlertMessage(this,"empty keyword");
@@ -123,7 +125,9 @@ public class PopupAddActivity extends ActionBarActivity implements OnClickListen
 			WordDictionaryDAO dao=new WordDictionaryDAO(this);
 			WordDictionary wd=new WordDictionary();
 			wd.setKeyword(keyWord);
-			wd.setMeaning(meaning);
+			LinkedList<String> newWordList = new LinkedList<String>();
+			newWordList.add(meaning);
+			wd.setMeaning(newWordList);
 			boolean isInserted = dao.insert(wd);
 			Log.d(POPUP, "ok clicked isInserted:"+isInserted);
 			if(isInserted){
